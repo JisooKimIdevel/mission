@@ -1,8 +1,11 @@
 package com.example.mission.Dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -12,11 +15,12 @@ public class BoardDto {
     private String boardTitle;
     private String boardCont;
     private String regId;
-    private String regDt;
+    private Timestamp regDt;
     private String modId;
-    private String modDt;
+    private Timestamp modDt;
     private String delId;
-    private String delDt;
+    private Timestamp delDt;
     private String delYn;
     private int readCnt;
+
 }

@@ -18,14 +18,18 @@ public class TestController {
     @ResponseBody
     @RequestMapping(value = "/gugudan")
     public String gugudan() {
+        String result = "";
+        result += "<table><tr>";
         for(int i=1; i<=9; i++) {
+            result += "<td style='padding:15px;'>";
             for(int j=1; j<=9; j++) {
 
-                log.info(i + "*" + j + "=" + (i*j));
+                result += i + "*" + j + "=" + (i*j) + "<br>";
             }
-            log.info("----------------");
+            result += "</td>";
         }
-        return "콘솔확인";
+        result += "</tr></table>";
+        return result;
     }
 
 }

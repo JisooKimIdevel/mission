@@ -12,20 +12,4 @@ import java.util.ArrayList;
 @Service
 @Slf4j
 public class BoardService {
-    @Autowired
-    BoardRepository boardRepository;
-    public ArrayList<BoardEntity> boardList(BoardEntity ett) {
-        log.info("service - list");
-        return boardRepository.boardList(ett);
-    }
-    public ArrayList<BoardEntity> boardInsert(BoardEntity ett) {
-        return boardRepository.boardInsert(ett);
-    }
-    public ArrayList<BoardEntity> boardUpdate(BoardEntity ett) {
-        return boardRepository.boardUpdate(ett);
-    }
-    public ArrayList<BoardEntity> boardDelete(BoardEntity ett) {
-        return boardRepository.boardDelete(ett);
-    }
-
 }

@@ -2,24 +2,28 @@ package com.example.mission.Controller;
 
 import com.example.mission.Dto.BoardDto;
 import com.example.mission.Entity.BoardEntity;
+import com.example.mission.Repository.BoardRepository;
 import com.example.mission.Service.BoardService;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Controller
 @Slf4j
 @RequestMapping(value = "/board")
 public class BoardController {
     @Autowired
-    BoardService boardService;
-
+    BoardRepository boardRepository;
 
     @GetMapping(value = "/")
     public String index() {
@@ -43,48 +47,77 @@ public class BoardController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/boardList", method = RequestMethod.POST)
-    public String boardList(@ModelAttribute BoardEntity ett) {
-        log.info("controller - boardList");
+    @RequestMapping(value = "/boardInsert", method = RequestMethod.POST)
+    public String insert(String boardTitle, String boardCont) {
+        log.info("controller");
         Gson gson = new Gson();
         HashMap<String,Object> map = new HashMap<>();
-        ArrayList<BoardEntity> list = new ArrayList<>();
-        list = boardService.boardList(ett);
-        log.info("list : " + list);
-        map.put("list",list);
-        log.info("map : " + map);
+        BoardEntity entity = BoardEntity.builder()
+                                        .boardTitle(boardTitle)
+                                        .boardCont(boardCont)
+                                        .regId("kjs")
+                                        .delYn("N")
+                                        .build();
+        entity = boardRepository.save(entity);
+        map.put("entity",entity);
         String jsonString = gson.toJson(map);
-        log.info("jsonString" + jsonString);
         return jsonString;
     }
-    @RequestMapping(value = "/boardInsert", method = RequestMethod.POST)
-    public String boardInsert(@ModelAttribute BoardEntity ett) {
+    @ResponseBody
+    @RequestMapping(value = "/boardList", method = RequestMethod.POST)
+    public String select() {
+        List<BoardEntity> list = boardRepository.findAll();
         Gson gson = new Gson();
-//        HashMap<String,Object> map = new HashMap<>();
-        ArrayList<BoardEntity> list = new ArrayList<>();
-        list = boardService.boardInsert(ett);
-//        map.put("list",list);
-        String jsonString = gson.toJson(list);
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("list", list);
+        String jsonString = gson.toJson(map);
         return jsonString;
     }
+    @ResponseBody
+    @RequestMapping(value = "/boardSel", method = RequestMethod.POST)
+    public String boardSel(int boardSeq) {
+        log.info("boardSeq : " + boardSeq);
+        Optional<BoardEntity> entity = boardRepository.findById(boardSeq);
+        Gson gson = new Gson();
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("boardInfo", entity);
+        log.info("map : " + map);
+        log.info("entity : " + entity);
+        String jsonString = gson.toJson(map);
+        log.info(jsonString);
+        return jsonString;
+    }
+    @ResponseBody
     @RequestMapping(value = "/boardUpdate", method = RequestMethod.POST)
-    public String boardUpdate(@ModelAttribute BoardEntity ett) {
+    public String update(int boardSeq, String boardTitle, String boardCont) {
         Gson gson = new Gson();
-//        HashMap<String,Object> map = new HashMap<>();
-        ArrayList<BoardEntity> list = new ArrayList<>();
-        list = boardService.boardUpdate(ett);
-//        map.put("list",list);
-        String jsonString = gson.toJson(list);
+        HashMap<String,Object> map = new HashMap<>();
+        BoardEntity entity = BoardEntity.builder()
+                                        .boardSeq(boardSeq)
+                                        .boardTitle(boardTitle)
+                                        .boardCont(boardCont)
+                                        .modId("kjs")
+                                        .build();
+        entity = boardRepository.save(entity);
+        map.put("entity",entity);
+        String jsonString = gson.toJson(map);
         return jsonString;
     }
+    @ResponseBody
     @RequestMapping(value = "/boardDelete", method = RequestMethod.POST)
-    public String boardDelete(@ModelAttribute BoardEntity ett) {
+    public String delete(int boardSeq, String boardTitle, String boardCont) {
         Gson gson = new Gson();
-//        HashMap<String,Object> map = new HashMap<>();
-        ArrayList<BoardEntity> list = new ArrayList<>();
-        list = boardService.boardDelete(ett);
-//        map.put("list",list);
-        String jsonString = gson.toJson(list);
+        HashMap<String,Object> map = new HashMap<>();
+        BoardEntity entity = BoardEntity.builder()
+                                        .boardSeq(boardSeq)
+                                        .boardTitle(boardTitle)
+                                        .boardCont(boardCont)
+                                        .delId("kjs")
+                                        .delYn("Y")
+                                        .build();
+        entity = boardRepository.save(entity);
+        map.put("entity",entity);
+        String jsonString = gson.toJson(map);
         return jsonString;
     }
 }

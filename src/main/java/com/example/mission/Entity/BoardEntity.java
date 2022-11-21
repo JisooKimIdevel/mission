@@ -1,16 +1,20 @@
 package com.example.mission.Entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
+
+
+@Entity
+@Getter
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Getter
-@Setter
-@ToString
 @Table(name="board_tb")
 public class BoardEntity {
     @Id
@@ -19,22 +23,31 @@ public class BoardEntity {
 
     @Column(length = 50, nullable = false)
     private String boardTitle;
+
     @Column(length = 2000, nullable = false)
     private String boardCont;
+
     @Column(length = 50)
     private String regId;
-    @Column(length = 50)
-    private String regDt;
+
+    @CreationTimestamp
+    private Timestamp regDt;
+
     @Column(length = 50)
     private String modId;
-    @Column(length = 50)
-    private String modDt;
+
+    @UpdateTimestamp
+    private Timestamp modDt;
+
     @Column(length = 50)
     private String delId;
-    @Column(length = 50)
-    private String delDt;
+
+    @UpdateTimestamp
+    private Timestamp delDt;
+
     @Column(length = 10)
     private String delYn;
+
     @Column
     private int readCnt;
 
